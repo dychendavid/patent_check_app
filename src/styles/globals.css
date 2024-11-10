@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-// NOTE this comment block is default committed, but is caused shadcn dialog and toast bg transparent
-/* 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-} */
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;

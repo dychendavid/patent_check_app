@@ -41,7 +41,7 @@ const HistoriesPage = () => {
         <CardContent>
           <div className="space-y-4">
             {savedAnalysis?.map((analysis, index) => (
-              <Link href={"/"}>
+              <Link href={"/"} key={index}>
                 <div
                   key={index}
                   className="border border-zinc-700 rounded-lg p-4 hover:bg-zinc-800 transition-colors cursor-pointer bg-zinc-900"

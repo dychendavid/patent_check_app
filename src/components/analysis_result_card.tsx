@@ -28,7 +28,7 @@ const AnalysisResultCard = ({
     format(searchStore.current.analysisDate, "yyyy-MM-dd HH:mm");
 
   useEffect(() => {
-    let found = !!historyStore.data?.find(
+    const found = !!historyStore.data?.find(
       (element) => element.analysisId == searchStore.current?.analysisId
     );
     setIsSaved(found);
