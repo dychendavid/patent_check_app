@@ -5,5 +5,7 @@ services:
     build:
       context: .
     container_name: app
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
     ports:
       - "3000:3000"
