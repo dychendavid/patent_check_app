@@ -10,7 +10,6 @@ const InfringingProductCard = ({
   product,
   key,
 }: InfringingProductCardProps) => {
-  // console.log("product", product);
   return (
     <div
       key={key}

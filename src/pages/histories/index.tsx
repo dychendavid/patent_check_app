@@ -4,14 +4,15 @@ import { AnalysisProps } from "@/stores/history_store";
 import useSearchStore from "@/stores/search_store";
 import useUserStore from "@/stores/user_store";
 import { format } from "date-fns";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Router } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 const HistoriesPage = () => {
   const searchStore = useSearchStore();
-
   const userStore = useUserStore();
+  const router = useRouter();
   const { savedAnalysis, refetchSavedAnalysis } = useAnalysisController(
     userStore.user_id
   );
@@ -63,8 +64,9 @@ const HistoriesPage = () => {
                     <button
                       className="px-4 py-2 bg-zinc-700 text-zinc-100 rounded-md hover:bg-zinc-600 transition-colors"
                       onClick={(e) => {
-                        e.stopPropagation();
+                        e.preventDefault();
                         handleSelectAnalysis(analysis);
+                        router.push("/");
                       }}
                     >
                       View Details

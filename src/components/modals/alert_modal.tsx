@@ -20,9 +20,6 @@ export const AlertModal = ({
   onClickNo,
   onClickYes,
 }: AlertModalProps) => {
-  if (!open) {
-    return;
-  }
   return (
     <AlertDialog open={open}>
       <AlertDialogContent>
