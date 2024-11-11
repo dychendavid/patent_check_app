@@ -5,11 +5,18 @@ export type SearchProps = {
   patentId?: string;
   companyName?: string;
   current?: AnalysisProps;
+};
+
+type SearchActions = {
   setCurrentAnalysis: (analysis: AnalysisProps) => void;
   setFormInfo: (patentId: string, companyName: string) => void;
 };
 
-const useSearchStore = create<SearchProps>((set, get) => ({
+type SearchStore = SearchProps & SearchActions;
+
+const useSearchStore = create<SearchStore>((set, get) => ({
+  patentId: "",
+  companyName: "",
   setCurrentAnalysis: (analysis: AnalysisProps) => {
     set({
       current: analysis,

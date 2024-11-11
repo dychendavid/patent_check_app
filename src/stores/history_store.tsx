@@ -19,12 +19,14 @@ export type AnalysisProps = {
 
 type HistoryStore = {
   data: AnalysisProps[];
+  isInitialized: boolean;
   add: (analysis: AnalysisProps) => void;
   remove: (key: number) => void;
   setData: (data: AnalysisProps[]) => void;
 };
 
 const useHistoryStore = create<HistoryStore>((set, get) => ({
+  isInitialized: false,
   data: [],
   add: (analysis: AnalysisProps) => {
     set((state) => ({
@@ -37,7 +39,7 @@ const useHistoryStore = create<HistoryStore>((set, get) => ({
     }));
   },
   setData: (data: AnalysisProps[]) => {
-    set({ data });
+    set({ data, isInitialized: true });
   },
 }));
 
