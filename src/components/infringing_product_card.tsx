@@ -20,7 +20,7 @@ const InfringingProductCard = ({
           {product.productName}
         </h4>
         <span
-          className={`px-3 py-1 rounded-full text-sm ${
+          className={`text-center px-3 py-1 rounded-full text-sm ${
             product.infringementLikelihood === "High"
               ? "bg-red-900/50 text-red-200"
               : product.infringementLikelihood === "Medium"

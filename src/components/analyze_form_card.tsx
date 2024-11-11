@@ -135,7 +135,7 @@ const AnalyzeFormCard = ({ onError }: AnalyzeFormCardProps) => {
               disabled={isLoading}
             />
           </div>
-          {true && (
+          {
             <div className="flex gap-4">
               <button
                 type="submit"
@@ -161,10 +161,10 @@ const AnalyzeFormCard = ({ onError }: AnalyzeFormCardProps) => {
                 onClick={handleClickViewHistory}
               >
                 <FileText size={20} />
-                View Saved Reports ({historyData?.length})
+                Saved ({historyData?.length})
               </Link>
             </div>
-          )}
+          }
         </form>
       </CardContent>
     </Card>

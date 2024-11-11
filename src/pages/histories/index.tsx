@@ -4,7 +4,7 @@ import { AnalysisProps } from "@/stores/history_store";
 import useSearchStore from "@/stores/search_store";
 import useUserStore from "@/stores/user_store";
 import { format } from "date-fns";
-import { ArrowLeft, Router } from "lucide-react";
+import { ArrowLeft, FileTextIcon, Router } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -36,7 +36,7 @@ const HistoriesPage = () => {
             href={"/"}
           >
             <ArrowLeft size={20} />
-            Back to Search
+            Back
           </Link>
         </CardHeader>
         <CardContent>
@@ -69,7 +69,7 @@ const HistoriesPage = () => {
                         router.push("/");
                       }}
                     >
-                      View Details
+                      View
                     </button>
                   </div>
                 </div>

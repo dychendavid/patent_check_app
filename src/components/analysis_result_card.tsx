@@ -104,7 +104,7 @@ const AnalysisResultCard = ({ analysis, onError }: AnalysusResultCardProps) => {
               "flex items-center gap-2 px-4 py-2 bg-rose-800 text-zinc-100 rounded-md hover:bg-rose-700 transition-colors"
             }
           >
-            <StarOffIcon size={20} fill="currentColor" /> Save Report
+            <StarOffIcon size={20} fill="currentColor" /> Drop
           </button>
         ) : (
           <button
@@ -114,7 +114,7 @@ const AnalysisResultCard = ({ analysis, onError }: AnalysusResultCardProps) => {
               "flex items-center gap-2 px-4 py-2 bg-zinc-800 text-lime-400 rounded-md hover:bg-zinc-600 transition-colors"
             }
           >
-            <StarIcon size={20} /> Save Report
+            <StarIcon size={20} /> Save
           </button>
         )}
       </CardHeader>
