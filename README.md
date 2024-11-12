@@ -1,40 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+This project is an frontend for Patent Infringement Check App, based on NextJS + Zustand.
 
-## Getting Started
+Use TanStack query to build API controller, like _Get saved analyis_, _Saving current analysis_, _Check infringement_.
 
-First, run the development server:
+Also use [shadcn](https://ui.shadcn.com/) to build pretty components, but this approach is different than traditional, it's more like a script tool, importing other 3rd party packages to generate code, like [radix-ui](https://www.radix-ui.com/), and it also generate components in the src/components/ui folder, it's convenient for a new project.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+### How to launch
+
+- better launch `patent_check_api` first
+- clone this repository
+  - `git clone https://github.com/dychendavid/patent_check_app`
+- put .env in the folder(below sample)
+- startup NextJS
+  - `docker compose up -d`
+- alternative with `--build` for code/.env updates
+  - `docker compose up -d --build`
+- test it with Browser Dev Tool for make sure calling right Host
+  - `http://{localhost}:3000`
+
+```
+# The domain should be public ip, when you build on production
+# Ex: NEXT_PUBLIC_API_URL=http://123.456.789:8000
+NEXT_PUBLIC_API_URL=http://localhost:8000
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### How to determine which products is the top possibily infringement products?
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+#### Simple Flow
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+```mermaid
+flowchart TB
+    S1[1.Get Embeddings]
+    S2[2.Calculate Cosine Distance]
+    S3[3.Calculate Score]
+    S4[4.Call API with Top Product]
+    S1 --- S2
+    S2 --- S3
+    S3 --- S4
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
 
-## Learn More
+### Step 1. Get Embeddings
 
-To learn more about Next.js, take a look at the following resources:
+- Pick up columns which most info
+  - This case is Project Description, Claim Description
+- Retrieve and save the embedding of picked columns by calling Open AI Embedding API
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+> We should keep all the embedding comes from same source and same version.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> Keep consistency is important than follow latest version.
 
-## Deploy on Vercel
+<br />
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Step 2. Calculate Cosine Distance
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+- Calculate the cosine distance between vector of Product Description and Claim Description, for finding the association.
+  - by using pgvector
+- The table rows growth: <br />
+  - 1 Company have `N` Products.<br />
+  - 1 Product have distances with `M` Claims.
+  - So the rows between specific company and specific patent, it will increase `N * M` rows
+- The table columns
+
+```python
+company_id,      # int
+product_id,      # int
+product_desc,    # varchar
+
+patent_id,       # int
+claim_id,        # int
+claim_desc,      # varchar
+
+cosine_distance  # float
+```
+
+<br />
+
+### Step 3. Calculate Infringing Possibility Score
+
+- Find a formula to determine Possibility Score
+- Smaller distance should be considered strong association, larger distance probably considered low association.
+
+  - Filter out the distances which over threshold, since the association maybe too low and no important value for reference.<br />
+  - Add up remaining distances to get a Possibility Score, maybe the future version we can higher the weight of Claims number.
+    > Ex: Claim number \* 2 + Sum of distances = Possibility Score
+
+- The table columns
+
+```python
+company_id,     # int
+product_id,     # int
+
+patent_id,      # int
+product_name,   # varchar
+product_desc,   # varchar
+claim_ids,      # int array
+claim_descs,    # varchar array
+
+score           # float
+```
+
+<br />
+
+### Step 4. Using LLM to do analyze
+
+Send related info to LLM without our previously calculated distances for get more diversify analysis result, and using Langchain to make sure LLM output format.
+
+<br />
